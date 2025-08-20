@@ -1,34 +1,20 @@
-create database db;
-
-
 import os
 
-def move_files_with_keyword(source_folder, destination_folder, keyword):
-    # Make sure destination exists
-    if not os.path.exists(destination_folder):
-        os.makedirs(destination_folder)
+# Path to folder containing text files
+folder = "E:/v2e/Source"
 
-    # Loop through all files in the source folder
-    for filename in os.listdir(source_folder):
-        source_file_path = os.path.join(source_folder, filename)
+# Dictionary to store filename: word_count
+result = {}
 
-        # Only process .txt files
-        if os.path.isfile(source_file_path) and filename.endswith('.txt'):
-            with open(source_file_path, 'r') as file:
-                content = file.read()
-                count = content.lower().count(keyword.lower())
+for filename in os.listdir(folder):
+    if filename.endswith(".txt"):
+        file_path = os.path.join(folder, filename)
+        with open(file_path, "r", encoding="utf-8") as f:
+            content = f.read()
+            # Split by whitespace to count words
+            word_count = len(content.split())
+            result[filename] = word_count
 
-                # If keyword is found, move file and report count
-                if count > 0:
-                    destination_file_path = os.path.join(destination_folder, filename)
-                    # Move the file to destination using os.rename
-                    os.rename(source_file_path, destination_file_path)
-                    print(f"FileName: {filename}  TotalCount: {count}")
-
-# Example usage
-source_folder = 'C:/Source'        # Make sure this folder exists with .txt files
-destination_folder = 'C:/Destination'  # This will be created if it doesn't exist
-keyword = 'v2etechnologies'
-
-move_files_with_keyword(source_folder, destination_folder, keyword)
-
+# Print result
+for name, count in result.items():
+    print(f"{name}: {count} words")
